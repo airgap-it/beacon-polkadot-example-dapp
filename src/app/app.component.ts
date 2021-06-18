@@ -53,6 +53,13 @@ export class AppComponent {
 
   networks: Network[] = [
     {
+      name: 'Westend',
+      value: 'westend',
+      prefix: 42,
+      url: 'wss://westend.api.onfinality.io/public-ws',
+      disabled: false,
+    },
+    {
       name: 'Polkadot',
       value: 'dot',
       prefix: 0,
@@ -64,13 +71,6 @@ export class AppComponent {
       value: 'ksm',
       prefix: 2,
       url: 'wss://kusama.api.onfinality.io/public-ws',
-      disabled: false,
-    },
-    {
-      name: 'Westend',
-      value: 'westend',
-      prefix: 42,
-      url: 'wss://westend.api.onfinality.io/public-ws',
       disabled: false,
     },
   ];
