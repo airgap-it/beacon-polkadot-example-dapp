@@ -127,10 +127,7 @@ export class AppComponent {
 
     let activeAccount = await this.client.getActiveAccount();
     if (activeAccount) {
-      const address = keyring.encodeAddress(
-        new Uint8Array(Buffer.from(activeAccount.publicKey, 'hex')),
-        this.activeNetwork.prefix
-      );
+      const address = this.getAddressFromPublicKey(activeAccount.publicKey);
 
       const key = 'beacon';
       await this.addSigner(key, {
@@ -185,10 +182,7 @@ export class AppComponent {
     console.log('activeAccount', activeAccount);
 
     if (activeAccount) {
-      this.address = keyring.encodeAddress(
-        new Uint8Array(Buffer.from(activeAccount.publicKey, 'hex')),
-        this.activeNetwork.prefix
-      );
+      this.address = this.getAddressFromPublicKey(activeAccount.publicKey);
 
       const key = 'beacon';
       await this.addSigner(key, {
@@ -236,5 +230,12 @@ export class AppComponent {
           }
         );
     }
+  }
+
+  private getAddressFromPublicKey(publicKey: string) {
+    return keyring.encodeAddress(
+      new Uint8Array(Buffer.from(publicKey, 'hex')),
+      this.activeNetwork.prefix
+    );
   }
 }
