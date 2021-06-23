@@ -84,7 +84,10 @@ export class AppComponent {
   private client: DAppClient;
 
   constructor() {
-    this.client = new DAppClient({ name: 'Polkadot Example' });
+    this.client = new DAppClient({
+      name: 'Polkadot Example',
+      matrixNodes: ['beacon-node-1.sky.papers.tech'],
+    });
 
     this.start();
   }
