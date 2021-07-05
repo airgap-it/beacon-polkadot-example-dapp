@@ -203,6 +203,9 @@ export class AppComponent {
   async addSigner(key: string, signerObj: SignerObject) {
     if (!this.signers.some((signer) => signer.value === key)) {
       this.signers.push(signerObj);
+      if (!this.activeSigner) {
+        this.activeSigner = signerObj;
+      }
     }
   }
 
@@ -214,25 +217,29 @@ export class AppComponent {
 
   async sign() {
     if (!this.api) {
+      console.error('this.api is not defined!');
       return;
     }
     if (!this.address) {
+      console.error('this.address is not defined!');
       return;
     }
 
-    if (this.activeSigner) {
-      const signerObj = this.activeSigner;
-
-      this.api.tx.balances
-        .transfer(this.recipient, this.amount)
-        .signAndSend(
-          signerObj.address,
-          { signer: signerObj.signer },
-          (status) => {
-            console.log('DONE', status);
-          }
-        );
+    if (!this.activeSigner) {
+      console.error('this.activeSigner is not defined!');
+      return;
     }
+    const signerObj = this.activeSigner;
+
+    this.api.tx.balances
+      .transfer(this.recipient, this.amount)
+      .signAndSend(
+        signerObj.address,
+        { signer: signerObj.signer },
+        (status) => {
+          console.log('DONE', status);
+        }
+      );
   }
 
   private getAddressFromPublicKey(publicKey: string) {
