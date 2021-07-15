@@ -87,6 +87,9 @@ export class AppComponent {
     this.client = new DAppClient({
       name: 'Polkadot Example',
       matrixNodes: ['beacon-node-1.sky.papers.tech'],
+      iconUrl:
+        'https://www.walletbeacon.io/wp-content/uploads/2021/03/beacon_logo-300x300.png',
+      appUrl: 'https://airgap-it.github.io/beacon-polkadot-example-dapp/',
     });
 
     this.start();
