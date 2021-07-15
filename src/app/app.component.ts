@@ -100,13 +100,12 @@ export class AppComponent {
 
     const network = this.networks.find((network) => network.value === value);
 
-    if (network) {
+    if (network && this.activeNetwork !== network) {
       this.activeNetwork = network;
+      this.signers = [];
+      this.start();
+      console.log('network', network);
     }
-
-    this.start();
-
-    console.log('network', network);
   }
 
   async signerChanged(event: Event) {
@@ -123,7 +122,11 @@ export class AppComponent {
 
   async start() {
     this.status = 'connecting...';
-
+    if (this.api) {
+      if (this.api.isConnected) {
+        await this.api.disconnect();
+      }
+    }
     const wsProvider = new WsProvider(this.activeNetwork.url);
     this.api = await ApiPromise.create({ provider: wsProvider });
     web3Enable('beacon-example');
@@ -204,12 +207,13 @@ export class AppComponent {
   }
 
   async addSigner(key: string, signerObj: SignerObject) {
-    if (!this.signers.some((signer) => signer.value === key)) {
-      this.signers.push(signerObj);
-      if (!this.activeSigner) {
-        this.activeSigner = signerObj;
-      }
-    }
+    const filteredSigners = this.signers.filter(
+      (signer) => signer.value !== key
+    );
+    filteredSigners.push(signerObj);
+    this.signers = filteredSigners;
+    console.log('AFTER ADDING SIGNERS', this.signers);
+    this.activeSigner = signerObj;
   }
 
   async disconnectBeacon() {
